@@ -97,6 +97,17 @@ public class Academia {
         }
     }
 
+    public void eliminarPrograma(ProgramaFormacion p) { programas.remove(p); }
+
+    public void actualizarPrograma(String codigoOriginal, ProgramaFormacion nuevoPrograma) {
+        for (int i = 0; i < programas.size(); i++) {
+            if (programas.get(i).getCodigo().equals(codigoOriginal)) {
+                programas.set(i, nuevoPrograma);
+                return;
+            }
+        }
+    }
+
     public void eliminarMatricula(Matricula m) {
         // Liberar cupo en el programa oferta correspondiente
         OfertaPeriodo periodoEncontrado = null;

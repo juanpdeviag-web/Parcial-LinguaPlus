@@ -123,7 +123,7 @@ public class ProgramasController {
             List<String> ben = Arrays.asList(txtBeneficiosProg.getText().split("\\s*,\\s*"));
             ProgramaFormacion nuevo;
 
-            // Simple Factory Pattern
+            // Patron Simple Factory
             if ("Personalizado".equals(cmbTipoProg.getValue())) {
                 nuevo = new ProgramaPersonalizado(txtCodigoProg.getText(), txtNombreProg.getText(), txtIdiomaProg.getText(),
                         txtDescripcionProg.getText(), duracion, valor, EstadoPrograma.ACTIVO, ben, sesiones, txtNivelRequerido.getText(), txtObjetivos.getText());
@@ -136,10 +136,8 @@ public class ProgramasController {
             }
 
             if (programaSeleccionado != null) {
-                // Si es edición, primero eliminamos el programa seleccionado
-                academia.getProgramas().remove(programaSeleccionado);
-                // Luego registramos el nuevo (con validación de código duplicado)
-                academia.registrarPrograma(nuevo);
+                // Si es edición, actualizar el programa
+                academia.actualizarPrograma(programaSeleccionado.getCodigo(), nuevo);
             } else {
                 // Si es nuevo programa, registramos directamente
                 academia.registrarPrograma(nuevo);
@@ -160,9 +158,14 @@ public class ProgramasController {
     @FXML
     private void eliminarPrograma() {
         if (programaSeleccionado == null) return;
-        academia.getProgramas().remove(programaSeleccionado);
+        academia.eliminarPrograma(programaSeleccionado);
         limpiarCampos();
         refrescar();
+        
+        // Notificar al MainController para actualizar la pestaña de ofertas
+        if (mainController != null) {
+            mainController.notificarCambioProgramas();
+        }
     }
 
     @FXML
