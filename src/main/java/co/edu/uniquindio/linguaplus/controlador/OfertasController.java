@@ -19,6 +19,7 @@ public class OfertasController {
 
     private Academia academia;
     private MainController mainController; // Enlace para notificar a otras pestañas
+    private javafx.collections.ObservableList<ProgramaOferta> listaOfertas;
 
     @FXML
     public void initialize() {
@@ -40,7 +41,7 @@ public class OfertasController {
         colOfertaHorario.setCellValueFactory(d -> new javafx.beans.property.SimpleStringProperty(d.getValue().getHorario()));
         colOfertaModalidad.setCellValueFactory(d -> new javafx.beans.property.SimpleStringProperty(d.getValue().getModalidad()));
         colOfertaBeneficios.setCellValueFactory(d -> new javafx.beans.property.SimpleStringProperty(d.getValue().getBeneficiosModalidad()));
-        colOfertaCupos.setCellValueFactory(d -> new javafx.beans.property.SimpleStringProperty(String.valueOf(d.getValue().getCuposDisponibles())));
+        colOfertaCupos.setCellValueFactory(d -> d.getValue().cuposDisponiblesProperty().asString());
     }
 
     public void setContexto(Academia academia, MainController main) {
@@ -91,6 +92,12 @@ public class OfertasController {
         for (OfertaPeriodo op : academia.getOfertasPeriodos()) {
             listaAplanada.addAll(op.getProgramas());
         }
-        tblOfertas.setItems(FXCollections.observableArrayList(listaAplanada));
+
+        // Crear ObservableList con extractor para observar cambios en cuposDisponibles
+        listaOfertas = FXCollections.observableArrayList(
+            po -> new javafx.beans.Observable[] { po.cuposDisponiblesProperty() }
+        );
+        listaOfertas.addAll(listaAplanada);
+        tblOfertas.setItems(listaOfertas);
     }
 }
