@@ -24,6 +24,8 @@
 
         <HBox spacing="8" GridPane.rowIndex="3" GridPane.columnIndex="3" alignment="CENTER_RIGHT">
             <Button text="Crear Oferta" onAction="#crearOfertaPeriodo"/>
+            <Button text="Editar Oferta" onAction="#editarOfertaPeriodo"/>
+            <Button text="Eliminar Oferta" onAction="#eliminarOfertaPeriodo"/>
         </HBox>
     </GridPane>
     <Label fx:id="lblOferta" style="-fx-text-fill: blue;"/>
