@@ -1,3 +1,10 @@
+.idea/
+*.iml
+out/
+target/
+.gradle/
+build/
+
 target/
 pom.xml.tag
 pom.xml.releaseBackup

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="10" xmlns:fx="http://javafx.com" fx:controller="co.edu.uniquindio.linguaplus.controlador.ProgramasController">
+    <padding><Insets top="15" right="15" bottom="15" left="15"/></padding>
+    <GridPane hgap="8" vgap="8">
+        <Label text="Tipo Programa" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+        <ComboBox fx:id="cmbTipoProg" prefWidth="150" GridPane.rowIndex="0" GridPane.columnIndex="1" onAction="#onTipoProgSeleccionado"/>
+        <Label text="Código" GridPane.rowIndex="0" GridPane.columnIndex="2"/>
+        <TextField fx:id="txtCodigoProg" GridPane.rowIndex="0" GridPane.columnIndex="3"/>
+
+        <Label text="Nombre" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+        <TextField fx:id="txtNombreProg" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+        <Label text="Idioma" GridPane.rowIndex="1" GridPane.columnIndex="2"/>
+        <TextField fx:id="txtIdiomaProg" GridPane.rowIndex="1" GridPane.columnIndex="3"/>
+
+        <Label text="Duración (Meses)" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+        <TextField fx:id="txtDuracionProg" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+        <Label text="Valor Mensual" GridPane.rowIndex="2" GridPane.columnIndex="2"/>
+        <TextField fx:id="txtValorProg" GridPane.rowIndex="2" GridPane.columnIndex="3"/>
+
+        <Label text="Descripción" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+        <TextField fx:id="txtDescripcionProg" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+        <Label text="Beneficios (Sep. por coma)" GridPane.rowIndex="3" GridPane.columnIndex="2"/>
+        <TextField fx:id="txtBeneficiosProg" GridPane.rowIndex="3" GridPane.columnIndex="3"/>
+
+        <!-- CAMPOS EXCLUSIVOS PERSONALIZADO -->
+        <Label text="Sesiones Tutor" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+        <TextField fx:id="txtSesionesTutor" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+        <Label text="Nivel Requerido" GridPane.rowIndex="4" GridPane.columnIndex="2"/>
+        <TextField fx:id="txtNivelRequerido" GridPane.rowIndex="4" GridPane.columnIndex="3"/>
+        <Label text="Objetivos" GridPane.rowIndex="5" GridPane.columnIndex="0"/>
+        <TextField fx:id="txtObjetivos" GridPane.rowIndex="5" GridPane.columnIndex="1" GridPane.columnSpan="3"/>
+    </GridPane>
+
+    <HBox spacing="8" alignment="CENTER_RIGHT">
+        <Button fx:id="btnAccionProg" text="Registrar" onAction="#procesarAccionPrograma"/>
+        <Button text="Cancelar" onAction="#limpiarCampos"/>
+        <Button text="Eliminar" onAction="#eliminarPrograma"/>
+    </HBox>
+
+    <Label fx:id="lblPrograma" style="-fx-text-fill: blue;"/>
+    <TableView fx:id="tblProgramas" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="colProgCodigo" text="Código" prefWidth="80"/>
+            <TableColumn fx:id="colProgNombre" text="Nombre" prefWidth="150"/>
+            <TableColumn fx:id="colProgTipo" text="Tipo" prefWidth="90"/>
+            <TableColumn fx:id="colProgIdioma" text="Idioma" prefWidth="90"/>
+            <TableColumn fx:id="colProgValor" text="Valor Base" prefWidth="100"/>
+            <TableColumn fx:id="colProgDescripcion" text="Descripción" prefWidth="200"/>
+            <TableColumn fx:id="colProgBeneficios" text="Beneficios" prefWidth="150"/>
+            <TableColumn fx:id="colProgSesiones" text="Sesiones" prefWidth="70"/>
+            <TableColumn fx:id="colProgNivel" text="Nivel" prefWidth="80"/>
+            <TableColumn fx:id="colProgObjetivos" text="Objetivos" prefWidth="200"/>
+        </columns>
+    </TableView>
+</VBox>

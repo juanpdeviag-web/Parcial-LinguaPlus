@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="12" xmlns:fx="http://javafx.com" fx:controller="co.edu.uniquindio.linguaplus.controlador.ConsultasController">
+    <padding><Insets top="15" right="15" bottom="15" left="15"/></padding>
+    <HBox spacing="8">
+        <Label text="Teléfono"/>
+        <TextField fx:id="txtTelefonoConsulta"/>
+        <Button text="Buscar / verificar perfecto" onAction="#buscarTelefono"/>
+    </HBox>
+    <Label fx:id="lblTelefonoConsulta"/>
+    <Separator/>
+    <HBox spacing="8">
+        <Label text="Desde"/>
+        <DatePicker fx:id="dpDesde"/>
+        <Label text="Hasta"/>
+        <DatePicker fx:id="dpHasta"/>
+        <Button text="Calcular ingresos" onAction="#calcularIngresos"/>
+    </HBox>
+    <Label fx:id="lblIngresos"/>
+    <Separator/>
+    <Label text="GENERACIÓN DE COMPROBANTES" style="-fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
+    <Label text="Seleccione un estudiante para filtrar sus matrículas, luego seleccione una matrícula y haga clic en 'Comprobante PDF' o 'Comprobante Excel' para descargar." style="-fx-text-fill: #555; -fx-font-size: 11px;"/>
+    <HBox spacing="8">
+        <Label text="Estudiante"/>
+        <ComboBox fx:id="cmbEstudiante" prefWidth="300"/>
+        <Label text="Matrícula"/>
+        <ComboBox fx:id="cmbMatriculaComprobante" prefWidth="300"/>
+    </HBox>
+    <HBox spacing="8">
+        <Button text="Comprobante PDF" onAction="#comprobantePdf"/>
+        <Button text="Comprobante Excel" onAction="#comprobanteExcel"/>
+    </HBox>
+    <Label text="DATOS DEL PROGRAMA" style="-fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
+    <VBox spacing="5" style="-fx-background-color: #f5f5f5; -fx-padding: 10; -fx-border-radius: 5;">
+        <Label fx:id="lblProgNombre" text="Nombre: -"/>
+        <Label fx:id="lblProgCodigo" text="Código: -"/>
+        <Label fx:id="lblProgIdioma" text="Idioma: -"/>
+        <Label fx:id="lblProgTipo" text="Tipo: -"/>
+        <Label fx:id="lblProgValor" text="Valor: -"/>
+        <Label fx:id="lblProgDescripcion" text="Descripción: -" wrapText="true"/>
+    </VBox>
+    <Separator/>
+    <Label text="SALIDA DE COMPROBANTES" style="-fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
+    <TextArea fx:id="txtSalida" prefRowCount="10" VBox.vgrow="ALWAYS"/>
+</VBox>

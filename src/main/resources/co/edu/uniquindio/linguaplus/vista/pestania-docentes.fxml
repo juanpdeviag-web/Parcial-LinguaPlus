@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="10" xmlns:fx="http://javafx.com" fx:controller="co.edu.uniquindio.linguaplus.controlador.DocentesController">
+    <padding><Insets top="15" right="15" bottom="15" left="15"/></padding>
+    <GridPane hgap="8" vgap="8">
+        <Label text="Identificación" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+        <TextField fx:id="txtIdDoc" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+        <Label text="Nombre Completo" GridPane.rowIndex="0" GridPane.columnIndex="2"/>
+        <TextField fx:id="txtNombreDoc" GridPane.rowIndex="0" GridPane.columnIndex="3"/>
+        <Label text="Idioma" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+        <TextField fx:id="txtIdiomaDoc" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+        <Label text="Teléfono" GridPane.rowIndex="1" GridPane.columnIndex="2"/>
+        <TextField fx:id="txtTelefonoDoc" GridPane.rowIndex="1" GridPane.columnIndex="3"/>
+        <Label text="Tarifa Sesión" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+        <TextField fx:id="txtTarifaDoc" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+        <HBox spacing="8" GridPane.rowIndex="2" GridPane.columnIndex="3" alignment="CENTER_RIGHT">
+            <Button fx:id="btnAccionDoc" text="Registrar" onAction="#procesarAccionDocente"/>
+            <Button text="Cancelar" onAction="#limpiarCampos"/>
+            <Button text="Eliminar" onAction="#eliminarDocente"/>
+        </HBox>
+    </GridPane>
+    <Label fx:id="lblDocente" style="-fx-text-fill: blue;"/>
+    <TableView fx:id="tblDocentes" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="colDocId" text="ID" prefWidth="100"/>
+            <TableColumn fx:id="colDocNombre" text="Nombre" prefWidth="200"/>
+            <TableColumn fx:id="colDocIdioma" text="Idioma" prefWidth="130"/>
+            <TableColumn fx:id="colDocTelefono" text="Teléfono" prefWidth="120"/>
+            <TableColumn fx:id="colDocTarifa" text="Tarifa" prefWidth="90"/>
+        </columns>
+    </TableView>
+</VBox>
