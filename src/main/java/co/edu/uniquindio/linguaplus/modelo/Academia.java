@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.time.LocalDate;
 
 public class Academia {
     private final String nombreComercial;
@@ -81,6 +82,43 @@ public class Academia {
         for (int i = 0; i < servicios.size(); i++) {
             if (servicios.get(i).getCodigo().equals(codigoOriginal)) {
                 servicios.set(i, nuevoServicio);
+                return;
+            }
+        }
+    }
+
+    public void eliminarOfertaPeriodo(OfertaPeriodo o) { ofertasPeriodos.remove(o); }
+    public void actualizarOfertaPeriodo(LocalDate fechaOriginal, OfertaPeriodo nuevaOferta) {
+        for (int i = 0; i < ofertasPeriodos.size(); i++) {
+            if (ofertasPeriodos.get(i).getFecha().equals(fechaOriginal)) {
+                ofertasPeriodos.set(i, nuevaOferta);
+                return;
+            }
+        }
+    }
+
+    public void eliminarMatricula(Matricula m) {
+        // Liberar cupo en el programa oferta correspondiente
+        OfertaPeriodo periodoEncontrado = null;
+        for (OfertaPeriodo op : ofertasPeriodos) {
+            if (op.getFecha().equals(m.getFechaInicio())) {
+                periodoEncontrado = op;
+                break;
+            }
+        }
+        if (periodoEncontrado != null) {
+            ProgramaOferta programaOferta = periodoEncontrado.encontrarProgramaOferta(m.getPrograma());
+            if (programaOferta != null) {
+                programaOferta.liberarCupo();
+            }
+        }
+        matriculas.remove(m);
+    }
+
+    public void actualizarMatricula(int numeroMatriculaOriginal, Matricula nuevaMatricula) {
+        for (int i = 0; i < matriculas.size(); i++) {
+            if (matriculas.get(i).getNumeroMatricula() == numeroMatriculaOriginal) {
+                matriculas.set(i, nuevaMatricula);
                 return;
             }
         }
