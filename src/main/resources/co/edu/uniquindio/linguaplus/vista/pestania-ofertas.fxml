@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="10" xmlns:fx="http://javafx.com" fx:controller="co.edu.uniquindio.linguaplus.controlador.OfertasController">
+    <padding><Insets top="15" right="15" bottom="15" left="15"/></padding>
+    <GridPane hgap="8" vgap="8">
+        <Label text="Fecha Inicio" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+        <DatePicker fx:id="dpFechaInicio" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+        <Label text="Fecha Fin" GridPane.rowIndex="0" GridPane.columnIndex="2"/>
+        <DatePicker fx:id="dpFechaFin" GridPane.rowIndex="0" GridPane.columnIndex="3"/>
+
+        <Label text="Programa" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+        <ComboBox fx:id="cmbProgramaOferta" prefWidth="250" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+        <Label text="Horario" GridPane.rowIndex="1" GridPane.columnIndex="2"/>
+        <ComboBox fx:id="cmbHorarioOferta" prefWidth="250" GridPane.rowIndex="1" GridPane.columnIndex="3"/>
+
+        <Label text="Modalidad" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+        <ComboBox fx:id="cmbModalidad" prefWidth="250" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+        <Label text="Cupos Iniciales" GridPane.rowIndex="2" GridPane.columnIndex="2"/>
+        <Spinner fx:id="spnCuposOferta" editable="true" GridPane.rowIndex="2" GridPane.columnIndex="3"/>
+
+        <HBox spacing="8" GridPane.rowIndex="3" GridPane.columnIndex="3" alignment="CENTER_RIGHT">
+            <Button text="Crear Oferta" onAction="#crearOfertaPeriodo"/>
+        </HBox>
+    </GridPane>
+    <Label fx:id="lblOferta" style="-fx-text-fill: blue;"/>
+    <TableView fx:id="tblOfertas" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="colOfertaInicio" text="F. Inicio" prefWidth="120"/>
+            <TableColumn fx:id="colOfertaFin" text="F. Fin" prefWidth="120"/>
+            <TableColumn fx:id="colOfertaProg" text="Programa" prefWidth="200"/>
+            <TableColumn fx:id="colOfertaHorario" text="Horario" prefWidth="120"/>
+            <TableColumn fx:id="colOfertaModalidad" text="Modalidad" prefWidth="100"/>
+            <TableColumn fx:id="colOfertaBeneficios" text="Beneficios" prefWidth="200"/>
+            <TableColumn fx:id="colOfertaCupos" text="Cupos Disp." prefWidth="100"/>
+        </columns>
+    </TableView>
+</VBox>

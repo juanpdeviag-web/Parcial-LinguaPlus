@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="10" xmlns:fx="http://javafx.com" fx:controller="co.edu.uniquindio.linguaplus.controlador.MatriculasController">
+    <padding><Insets top="15" right="15" bottom="15" left="15"/></padding>
+    <GridPane hgap="8" vgap="8">
+        <Label text="Estudiante" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+        <ComboBox fx:id="cmbEstudiante" prefWidth="250" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+        <Label text="Programa" GridPane.rowIndex="0" GridPane.columnIndex="2"/>
+        <ComboBox fx:id="cmbPrograma" prefWidth="300" GridPane.rowIndex="0" GridPane.columnIndex="3"/>
+
+        <Label text="Periodo Oferta Activo" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+        <ComboBox fx:id="cmbPeriodoOferta" prefWidth="250" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+        <Label text="Tutor Opcional" GridPane.rowIndex="1" GridPane.columnIndex="2"/>
+        <ComboBox fx:id="cmbTutor" prefWidth="300" GridPane.rowIndex="1" GridPane.columnIndex="3"/>
+
+        <Label text="Descuento %" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+        <TextField fx:id="txtDescuento" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+        <Label text="Observaciones" GridPane.rowIndex="2" GridPane.columnIndex="2"/>
+        <TextField fx:id="txtObservaciones" GridPane.rowIndex="2" GridPane.columnIndex="3"/>
+    </GridPane>
+    <Label text="Servicios adicionales (Ctrl para seleccionar varios)"/>
+    <ListView fx:id="lstServicios" prefHeight="90"/>
+    <Button text="Registrar matrícula" onAction="#registrarMatricula"/>
+    <Label fx:id="lblMatricula" style="-fx-text-fill: blue;"/>
+    <TableView fx:id="tblMatriculas" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="colMatNumero" text="#" prefWidth="60" minWidth="50"/>
+            <TableColumn fx:id="colMatEstudiante" text="Estudiante" prefWidth="200" minWidth="150"/>
+            <TableColumn fx:id="colMatPrograma" text="Programa" prefWidth="180" minWidth="150"/>
+            <TableColumn fx:id="colMatFechaInicio" text="Fecha Inicio" prefWidth="130" minWidth="110"/>
+            <TableColumn fx:id="colMatFechaFin" text="Fecha Fin" prefWidth="130" minWidth="110"/>
+            <TableColumn fx:id="colMatTotal" text="Total" prefWidth="120" minWidth="100"/>
+            <TableColumn fx:id="colMatServicios" text="Servicios" prefWidth="200" minWidth="150"/>
+        </columns>
+    </TableView>
+</VBox>

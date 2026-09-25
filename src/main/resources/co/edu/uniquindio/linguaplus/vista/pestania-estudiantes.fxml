@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="10" xmlns:fx="http://javafx.com" fx:controller="co.edu.uniquindio.linguaplus.controlador.EstudiantesController">
+    <padding><Insets top="15" right="15" bottom="15" left="15"/></padding>
+    <GridPane hgap="8" vgap="8">
+        <Label text="Nombre" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+        <TextField fx:id="txtNombreEst" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+        <Label text="Documento" GridPane.rowIndex="0" GridPane.columnIndex="2"/>
+        <TextField fx:id="txtDocumentoEst" GridPane.rowIndex="0" GridPane.columnIndex="3"/>
+        <Label text="Teléfono" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+        <TextField fx:id="txtTelefonoEst" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+        <Label text="Correo" GridPane.rowIndex="1" GridPane.columnIndex="2"/>
+        <TextField fx:id="txtCorreoEst" GridPane.rowIndex="1" GridPane.columnIndex="3"/>
+        <Label text="Edad" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+        <TextField fx:id="txtEdadEst" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+        <HBox spacing="8" GridPane.rowIndex="2" GridPane.columnIndex="3" alignment="CENTER_RIGHT">
+            <Button fx:id="btnAccionEst" text="Registrar" onAction="#procesarAccionEstudiante"/>
+            <Button text="Cancelar" onAction="#limpiarCampos"/>
+            <Button text="Eliminar" onAction="#eliminarEstudiante"/>
+        </HBox>
+    </GridPane>
+    <Label fx:id="lblEstudiante" style="-fx-text-fill: blue;"/>
+    <TableView fx:id="tblEstudiantes" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="colEstNombre" text="Nombre" prefWidth="180"/>
+            <TableColumn fx:id="colEstDocumento" text="Documento" prefWidth="110"/>
+            <TableColumn fx:id="colEstTelefono" text="Teléfono" prefWidth="110"/>
+            <TableColumn fx:id="colEstCorreo" text="Correo" prefWidth="160"/>
+            <TableColumn fx:id="colEstEdad" text="Edad" prefWidth="60"/>
+        </columns>
+    </TableView>
+</VBox>
