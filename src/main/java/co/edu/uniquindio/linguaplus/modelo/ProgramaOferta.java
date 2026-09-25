@@ -1,14 +1,11 @@
 package co.edu.uniquindio.linguaplus.modelo;
 
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-
 import java.time.LocalDate;
 
 public class ProgramaOferta implements Cloneable {
     private final ProgramaFormacion programa;
     private final String horario;
-    private final IntegerProperty cuposDisponibles;
+    private int cuposDisponibles;
     private String modalidad; // "Presencial" o "Virtual"
     // NUEVOS ATRIBUTOS DE VIGENCIA AUTÓNOMA
     private LocalDate fechaInicio;
@@ -18,18 +15,18 @@ public class ProgramaOferta implements Cloneable {
         if (programa == null) throw new IllegalArgumentException("Programa obligatorio");
         if (cuposDisponibles < 0) throw new IllegalArgumentException("Cupos invalidos");
         this.programa = programa; this.horario = horario;
-        this.cuposDisponibles = new SimpleIntegerProperty(cuposDisponibles);
+        this.cuposDisponibles = cuposDisponibles;
         this.modalidad = modalidad;
     }
 
     public void ocuparCupo() {
-        if (cuposDisponibles.get() == 0) throw new IllegalStateException("No hay cupos disponibles");
-        cuposDisponibles.set(cuposDisponibles.get() - 1);
+        if (cuposDisponibles == 0) throw new IllegalStateException("No hay cupos disponibles");
+        cuposDisponibles--;
     }
-    
+
     @Override
     public ProgramaOferta clone() {
-        ProgramaOferta copia = new ProgramaOferta(programa, horario, cuposDisponibles.get(), modalidad);
+        ProgramaOferta copia = new ProgramaOferta(programa, horario, cuposDisponibles, modalidad);
         copia.setFechasVigencia(this.fechaInicio, this.fechaFin);
         return copia;
     }
@@ -42,8 +39,7 @@ public class ProgramaOferta implements Cloneable {
 
     public ProgramaFormacion getPrograma() { return programa; }
     public String getHorario() { return horario; }
-    public int getCuposDisponibles() { return cuposDisponibles.get(); }
-    public IntegerProperty cuposDisponiblesProperty() { return cuposDisponibles; }
+    public int getCuposDisponibles() { return cuposDisponibles; }
     public String getModalidad() { return modalidad; }
     public void setModalidad(String modalidad) { this.modalidad = modalidad; }
     public LocalDate getFechaInicio() { return fechaInicio; }

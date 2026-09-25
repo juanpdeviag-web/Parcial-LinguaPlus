@@ -1,9 +1,6 @@
 package co.edu.uniquindio.linguaplus.controlador;
 
-import co.edu.uniquindio.linguaplus.modelo.Academia;
-import co.edu.uniquindio.linguaplus.modelo.Estudiante;
-import co.edu.uniquindio.linguaplus.modelo.Matricula;
-import co.edu.uniquindio.linguaplus.modelo.ProgramaFormacion;
+import co.edu.uniquindio.linguaplus.modelo.*;
 import co.edu.uniquindio.linguaplus.modelo.comprobante.GeneradorComprobante;
 import co.edu.uniquindio.linguaplus.modelo.comprobante.GeneradorExcel;
 import co.edu.uniquindio.linguaplus.modelo.comprobante.GeneradorPdf;

@@ -1,6 +1,12 @@
 package co.edu.uniquindio.linguaplus.controlador;
 
-import co.edu.uniquindio.linguaplus.modelo.modalidad.Estudiante;
+import co.edu.uniquindio.linguaplus.modelo.*;
+import co.edu.uniquindio.linguaplus.modelo.comprobante.GeneradorComprobante;
+import co.edu.uniquindio.linguaplus.modelo.comprobante.GeneradorExcel;
+import co.edu.uniquindio.linguaplus.modelo.comprobante.GeneradorPdf;
+import co.edu.uniquindio.linguaplus.modelo.modalidad.FabricaPresencial;
+import co.edu.uniquindio.linguaplus.modelo.modalidad.FabricaVirtual;
+import co.edu.uniquindio.linguaplus.modelo.modalidad.ServicioModalidad;
 import co.edu.uniquindio.linguaplus.servicio.ServicioConsultas;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
