@@ -5,6 +5,7 @@ import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.layout.GridPane;
 import java.time.LocalDate;
 import java.util.List;
@@ -15,10 +16,11 @@ public class MatriculasController {
     @FXML private ComboBox<ProgramaFormacion> cmbPrograma;
     @FXML private ComboBox<OfertaPeriodo> cmbPeriodoOferta; // Restringe la selección a períodos válidos
     @FXML private ComboBox<Docente> cmbTutor;
-    @FXML private TableView<ServicioAdicional> tblServicios;
-    @FXML private TableColumn<ServicioAdicional, String> colServCodigo, colServNombre, colServDescripcion, colServPrecio, colServDisponible;
+    @FXML private TableView<ServicioSeleccionable> tblServicios;
+    @FXML private TableColumn<ServicioSeleccionable, Boolean> colServSeleccion;
+    @FXML private TableColumn<ServicioSeleccionable, String> colServCodigo, colServNombre, colServDescripcion, colServPrecio, colServDisponible;
     @FXML private TextField txtDescuento, txtObservaciones;
-    @FXML private Label lblMatricula;
+    @FXML private Label lblMatricula, lblTotalEstimado;
     @FXML private TableView<Matricula> tblMatriculas;
     @FXML private TableColumn<Matricula, String> colMatNumero, colMatEstudiante, colMatPrograma, colMatFechaInicio, colMatFechaFin, colMatTotal, colMatServicios;
 
@@ -30,6 +32,36 @@ public class MatriculasController {
         cmbTutor.setDisable(true);
         
         // Configurar columnas de la tabla de servicios
+        colServSeleccion.setCellValueFactory(d -> d.getValue().seleccionadoProperty());
+        colServSeleccion.setCellFactory(tc -> new TableCell<ServicioSeleccionable, Boolean>() {
+            private final CheckBox checkBox = new CheckBox();
+            
+            {
+                checkBox.setOnAction(e -> {
+                    if (getTableRow() != null && getTableRow().getItem() != null) {
+                        getTableRow().getItem().setSeleccionado(checkBox.isSelected());
+                    }
+                });
+            }
+            
+            @Override
+            protected void updateItem(Boolean item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || getTableRow() == null || getTableRow().getItem() == null) {
+                    setGraphic(null);
+                } else {
+                    ServicioSeleccionable ss = getTableRow().getItem();
+                    checkBox.setSelected(item);
+                    checkBox.setDisable(!ss.isDisponible());
+                    if (!ss.isDisponible() && item) {
+                        // Si el servicio no está disponible y estaba seleccionado, deseleccionarlo
+                        ss.setSeleccionado(false);
+                        checkBox.setSelected(false);
+                    }
+                    setGraphic(checkBox);
+                }
+            }
+        });
         colServCodigo.setCellValueFactory(d -> new javafx.beans.property.SimpleStringProperty(d.getValue().getCodigo()));
         colServNombre.setCellValueFactory(d -> new javafx.beans.property.SimpleStringProperty(d.getValue().getNombre()));
         colServDescripcion.setCellValueFactory(d -> new javafx.beans.property.SimpleStringProperty(d.getValue().getDescripcion()));
@@ -63,6 +95,10 @@ public class MatriculasController {
         
         // Listener para filtrar programas cuando se selecciona un período
         cmbPeriodoOferta.setOnAction(e -> filtrarProgramasPorPeriodo());
+        
+        // Listeners para actualizar el total estimado
+        cmbPrograma.setOnAction(e -> actualizarTotalEstimado());
+        txtDescuento.textProperty().addListener((obs, oldVal, newVal) -> actualizarTotalEstimado());
     }
 
     @FXML
@@ -85,6 +121,32 @@ public class MatriculasController {
         }
         // Limpiar selección de programa
         cmbPrograma.setValue(null);
+        actualizarTotalEstimado();
+    }
+
+    private void actualizarTotalEstimado() {
+        ProgramaFormacion programa = cmbPrograma.getValue();
+        double descuento = 0;
+        try {
+            descuento = txtDescuento.getText().isBlank() ? 0 : Double.parseDouble(txtDescuento.getText());
+        } catch (NumberFormatException e) {
+            descuento = 0;
+        }
+        
+        double subtotal = 0;
+        if (programa != null) {
+            subtotal = programa.calcularValorBase();
+        }
+        
+        // Sumar servicios seleccionados
+        for (ServicioSeleccionable ss : tblServicios.getItems()) {
+            if (ss.isSeleccionado()) {
+                subtotal += ss.getPrecio();
+            }
+        }
+        
+        double total = subtotal * (1.0 - descuento / 100.0);
+        lblTotalEstimado.setText(String.format("$%.2f", total));
     }
 
     @FXML
@@ -118,13 +180,21 @@ public class MatriculasController {
                 }
             }
 
-            Matricula m = new Matricula.Builder()
+            // Agregar servicios seleccionados
+            Matricula.Builder matriculaBuilder = new Matricula.Builder()
                     .conEstudiante(est)
                     .conPrograma(prog)
                     .conFechaInicio(periodo.getFecha())
                     .conDescuento(txtDescuento.getText().isBlank() ? 0 : Double.parseDouble(txtDescuento.getText()))
-                    .conObservaciones(txtObservaciones.getText())
-                    .build();
+                    .conObservaciones(txtObservaciones.getText());
+            
+            for (ServicioSeleccionable ss : tblServicios.getItems()) {
+                if (ss.isSeleccionado()) {
+                    matriculaBuilder.agregarServicio(ss.getServicio());
+                }
+            }
+            
+            Matricula m = matriculaBuilder.build();
 
             academia.registrarMatricula(m);
             
@@ -150,10 +220,22 @@ public class MatriculasController {
         if (academia == null) return;
         cmbEstudiante.setItems(FXCollections.observableArrayList(academia.getEstudiantes()));
         cmbPeriodoOferta.setItems(FXCollections.observableArrayList(academia.getOfertasPeriodos()));
-        tblServicios.setItems(FXCollections.observableArrayList(academia.getServicios()));
+        
+        // Cargar servicios con listeners para actualizar el total
+        var serviciosSeleccionables = academia.getServicios().stream()
+            .map(ServicioSeleccionable::new)
+            .toList();
+        tblServicios.setItems(FXCollections.observableArrayList(serviciosSeleccionables));
+        
+        // Agregar listeners a cada servicio para actualizar el total cuando cambie la selección
+        for (ServicioSeleccionable ss : tblServicios.getItems()) {
+            ss.seleccionadoProperty().addListener((obs, oldVal, newVal) -> actualizarTotalEstimado());
+        }
+        
         tblMatriculas.setItems(FXCollections.observableArrayList(academia.getMatriculas()));
         // Programas se cargan según el período seleccionado
         filtrarProgramasPorPeriodo();
+        actualizarTotalEstimado();
     }
 
     @FXML
@@ -229,11 +311,12 @@ public class MatriculasController {
 
     @FXML
     private void editarServicio() {
-        ServicioAdicional servicioSeleccionado = tblServicios.getSelectionModel().getSelectedItem();
-        if (servicioSeleccionado == null) {
+        ServicioSeleccionable servicioSeleccionable = tblServicios.getSelectionModel().getSelectedItem();
+        if (servicioSeleccionable == null) {
             lblMatricula.setText("Error: Debe seleccionar un servicio para editar.");
             return;
         }
+        ServicioAdicional servicioSeleccionado = servicioSeleccionable.getServicio();
 
         try {
             Dialog<ServicioAdicional> dialog = new Dialog<>();
@@ -303,11 +386,12 @@ public class MatriculasController {
 
     @FXML
     private void eliminarServicio() {
-        ServicioAdicional servicioSeleccionado = tblServicios.getSelectionModel().getSelectedItem();
-        if (servicioSeleccionado == null) {
+        ServicioSeleccionable servicioSeleccionable = tblServicios.getSelectionModel().getSelectedItem();
+        if (servicioSeleccionable == null) {
             lblMatricula.setText("Error: Debe seleccionar un servicio para eliminar.");
             return;
         }
+        ServicioAdicional servicioSeleccionado = servicioSeleccionable.getServicio();
 
         Alert alerta = new Alert(Alert.AlertType.CONFIRMATION);
         alerta.setTitle("Confirmar eliminación");
@@ -320,6 +404,119 @@ public class MatriculasController {
                 academia.eliminarServicio(servicioSeleccionado);
                 lblMatricula.setText("Servicio eliminado exitosamente.");
                 refrescar();
+            } catch (Exception ex) {
+                lblMatricula.setText("Error: " + ex.getMessage());
+            }
+        }
+    }
+
+    @FXML
+    private void editarMatricula() {
+        Matricula matriculaSeleccionada = tblMatriculas.getSelectionModel().getSelectedItem();
+        if (matriculaSeleccionada == null) {
+            lblMatricula.setText("Error: Debe seleccionar una matrícula para editar.");
+            return;
+        }
+
+        try {
+            Dialog<Matricula> dialog = new Dialog<>();
+            dialog.setTitle("Editar Matrícula");
+            dialog.setHeaderText("Modifique los datos de la matrícula");
+
+            ButtonType guardarButtonType = new ButtonType("Guardar", ButtonBar.ButtonData.OK_DONE);
+            dialog.getDialogPane().getButtonTypes().addAll(guardarButtonType, ButtonType.CANCEL);
+
+            GridPane grid = new GridPane();
+            grid.setHgap(10);
+            grid.setVgap(10);
+            grid.setPadding(new Insets(20, 150, 10, 10));
+
+            ComboBox<Estudiante> cmbEstEdit = new ComboBox<>(FXCollections.observableArrayList(academia.getEstudiantes()));
+            cmbEstEdit.setValue(matriculaSeleccionada.getEstudiante());
+            cmbEstEdit.setDisable(true); // No cambiar estudiante
+            ComboBox<ProgramaFormacion> cmbProgEdit = new ComboBox<>(FXCollections.observableArrayList(academia.getProgramas()));
+            cmbProgEdit.setValue(matriculaSeleccionada.getPrograma());
+            cmbProgEdit.setDisable(true); // No cambiar programa
+            DatePicker dpFechaEdit = new DatePicker(matriculaSeleccionada.getFechaInicio());
+            dpFechaEdit.setDisable(true); // No cambiar fecha
+            TextField txtDescuentoEdit = new TextField(String.valueOf(matriculaSeleccionada.getDescuentoPorcentaje()));
+            TextField txtObservacionesEdit = new TextField(matriculaSeleccionada.getObservaciones());
+
+            grid.add(new Label("Estudiante:"), 0, 0);
+            grid.add(cmbEstEdit, 1, 0);
+            grid.add(new Label("Programa:"), 0, 1);
+            grid.add(cmbProgEdit, 1, 1);
+            grid.add(new Label("Fecha Inicio:"), 0, 2);
+            grid.add(dpFechaEdit, 1, 2);
+            grid.add(new Label("Descuento %:"), 0, 3);
+            grid.add(txtDescuentoEdit, 1, 3);
+            grid.add(new Label("Observaciones:"), 0, 4);
+            grid.add(txtObservacionesEdit, 1, 4);
+
+            dialog.getDialogPane().setContent(grid);
+
+            dialog.setResultConverter(dialogButton -> {
+                if (dialogButton == guardarButtonType) {
+                    try {
+                        double descuento = txtDescuentoEdit.getText().isBlank() ? 0 : Double.parseDouble(txtDescuentoEdit.getText());
+                        return new Matricula.Builder()
+                            .conEstudiante(matriculaSeleccionada.getEstudiante())
+                            .conPrograma(matriculaSeleccionada.getPrograma())
+                            .conFechaInicio(matriculaSeleccionada.getFechaInicio())
+                            .conDocenteTutor(matriculaSeleccionada.getDocenteTutor())
+                            .conDescuento(descuento)
+                            .conObservaciones(txtObservacionesEdit.getText())
+                            .build();
+                    } catch (Exception e) {
+                        lblMatricula.setText("Error: " + e.getMessage());
+                        return null;
+                    }
+                }
+                return null;
+            });
+
+            Optional<Matricula> resultado = dialog.showAndWait();
+            resultado.ifPresent(nuevaMatricula -> {
+                try {
+                    academia.actualizarMatricula(matriculaSeleccionada.getNumeroMatricula(), nuevaMatricula);
+                    lblMatricula.setText("Matrícula actualizada exitosamente.");
+                    refrescar();
+                } catch (Exception ex) {
+                    lblMatricula.setText("Error: " + ex.getMessage());
+                }
+            });
+        } catch (Exception ex) {
+            lblMatricula.setText("Error: " + ex.getMessage());
+        }
+    }
+
+    @FXML
+    private void eliminarMatricula() {
+        Matricula matriculaSeleccionada = tblMatriculas.getSelectionModel().getSelectedItem();
+        if (matriculaSeleccionada == null) {
+            lblMatricula.setText("Error: Debe seleccionar una matrícula para eliminar.");
+            return;
+        }
+
+        Alert alerta = new Alert(Alert.AlertType.CONFIRMATION);
+        alerta.setTitle("Confirmar eliminación");
+        alerta.setHeaderText("¿Está seguro de eliminar la matrícula?");
+        alerta.setContentText("Matrícula #" + matriculaSeleccionada.getNumeroMatricula() + 
+            "\nEstudiante: " + matriculaSeleccionada.getEstudiante().getNombreCompleto() +
+            "\nPrograma: " + matriculaSeleccionada.getPrograma().getNombre() +
+            "\n\nSe liberará un cupo en la oferta correspondiente.");
+
+        Optional<ButtonType> respuesta = alerta.showAndWait();
+        if (respuesta.isPresent() && respuesta.get() == ButtonType.OK) {
+            try {
+                academia.eliminarMatricula(matriculaSeleccionada);
+                lblMatricula.setText("Matrícula eliminada exitosamente. Cupo liberado.");
+                refrescar();
+                
+                // Notificar al MainController para refrescar la pestaña de ofertas
+                if (mainController != null) {
+                    mainController.notificarCambioOfertas();
+                }
             } catch (Exception ex) {
                 lblMatricula.setText("Error: " + ex.getMessage());
             }

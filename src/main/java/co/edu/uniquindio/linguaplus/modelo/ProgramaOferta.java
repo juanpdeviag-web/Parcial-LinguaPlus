@@ -27,6 +27,10 @@ public class ProgramaOferta implements Cloneable {
         cuposDisponibles.set(cuposDisponibles.get() - 1);
     }
 
+    public void liberarCupo() {
+        cuposDisponibles.set(cuposDisponibles.get() + 1);
+    }
+
     @Override
     public ProgramaOferta clone() {
         ProgramaOferta copia = new ProgramaOferta(programa, horario, cuposDisponibles.get(), modalidad);

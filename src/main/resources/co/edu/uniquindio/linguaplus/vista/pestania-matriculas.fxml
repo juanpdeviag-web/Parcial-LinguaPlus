@@ -24,6 +24,7 @@
     <Label text="Servicios adicionales"/>
     <TableView fx:id="tblServicios" prefHeight="220">
         <columns>
+            <TableColumn fx:id="colServSeleccion" text="Seleccionar" prefWidth="80" minWidth="60"/>
             <TableColumn fx:id="colServCodigo" text="Código" prefWidth="100" minWidth="80"/>
             <TableColumn fx:id="colServNombre" text="Nombre" prefWidth="150" minWidth="120"/>
             <TableColumn fx:id="colServDescripcion" text="Descripción" prefWidth="200" minWidth="150"/>
@@ -36,7 +37,13 @@
         <Button text="Editar Servicio" onAction="#editarServicio"/>
         <Button text="Eliminar Servicio" onAction="#eliminarServicio"/>
     </HBox>
-    <Button text="Registrar matrícula" onAction="#registrarMatricula"/>
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <Button text="Registrar matrícula" onAction="#registrarMatricula"/>
+        <Button text="Editar Matrícula" onAction="#editarMatricula"/>
+        <Button text="Eliminar Matrícula" onAction="#eliminarMatricula"/>
+        <Label text="Total estimado:"/>
+        <Label fx:id="lblTotalEstimado" style="-fx-text-fill: green; -fx-font-weight: bold;"/>
+    </HBox>
     <Label fx:id="lblMatricula" style="-fx-text-fill: blue;"/>
     <TableView fx:id="tblMatriculas" VBox.vgrow="ALWAYS">
         <columns>
