@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns:fx="http://javafx.com" fx:controller="co.edu.uniquindio.linguaplus.controlador.MainController">
+    <top>
+        <Label text="LinguaPlus - Administración Académica" style="-fx-font-size: 22px; -fx-font-weight: bold;">
+            <padding><Insets top="15" right="15" bottom="15" left="15"/></padding>
+        </Label>
+    </top>
+    <center>
+        <TabPane tabClosingPolicy="UNAVAILABLE">
+            <tabs>
+                <Tab text="Estudiantes">
+                    <fx:include fx:id="pestaniaEstudiantes" source="pestania-estudiantes.fxml"/>
+                </Tab>
+                <Tab text="Programas">
+                    <fx:include fx:id="pestaniaProgramas" source="pestania-programas.fxml"/>
+                </Tab>
+                <Tab text="Docentes">
+                    <fx:include fx:id="pestaniaDocentes" source="pestania-docentes.fxml"/>
+                </Tab>
+                <Tab text="Oferta por Periodo">
+                    <fx:include fx:id="pestaniaOfertas" source="pestania-ofertas.fxml"/>
+                </Tab>
+                <Tab text="Matrículas">
+                    <fx:include fx:id="pestaniaMatriculas" source="pestania-matriculas.fxml"/>
+                </Tab>
+                <Tab text="Consultas y Salida">
+                    <fx:include fx:id="pestaniaConsultas" source="pestania-consultas.fxml"/>
+                </Tab>
+            </tabs>
+        </TabPane>
+    </center>
+</BorderPane>
