@@ -21,8 +21,21 @@
         <Label text="Observaciones" GridPane.rowIndex="2" GridPane.columnIndex="2"/>
         <TextField fx:id="txtObservaciones" GridPane.rowIndex="2" GridPane.columnIndex="3"/>
     </GridPane>
-    <Label text="Servicios adicionales (Ctrl para seleccionar varios)"/>
-    <ListView fx:id="lstServicios" prefHeight="90"/>
+    <Label text="Servicios adicionales"/>
+    <TableView fx:id="tblServicios" prefHeight="220">
+        <columns>
+            <TableColumn fx:id="colServCodigo" text="Código" prefWidth="100" minWidth="80"/>
+            <TableColumn fx:id="colServNombre" text="Nombre" prefWidth="150" minWidth="120"/>
+            <TableColumn fx:id="colServDescripcion" text="Descripción" prefWidth="200" minWidth="150"/>
+            <TableColumn fx:id="colServPrecio" text="Precio" prefWidth="100" minWidth="80"/>
+            <TableColumn fx:id="colServDisponible" text="Disponible" prefWidth="100" minWidth="80"/>
+        </columns>
+    </TableView>
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <Button text="Crear Servicio" onAction="#crearServicio"/>
+        <Button text="Editar Servicio" onAction="#editarServicio"/>
+        <Button text="Eliminar Servicio" onAction="#eliminarServicio"/>
+    </HBox>
     <Button text="Registrar matrícula" onAction="#registrarMatricula"/>
     <Label fx:id="lblMatricula" style="-fx-text-fill: blue;"/>
     <TableView fx:id="tblMatriculas" VBox.vgrow="ALWAYS">

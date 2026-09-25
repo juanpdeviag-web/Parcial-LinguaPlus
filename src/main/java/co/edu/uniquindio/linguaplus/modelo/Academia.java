@@ -46,7 +46,12 @@ public class Academia {
         }
         programas.add(p);
     }
-    public void registrarServicio(ServicioAdicional s) { servicios.add(s); }
+    public void registrarServicio(ServicioAdicional s) {
+        if (servicios.stream().anyMatch(serv -> serv.getCodigo().equals(s.getCodigo()))) {
+            throw new IllegalArgumentException("Ya existe un servicio registrado con el código: " + s.getCodigo());
+        }
+        servicios.add(s);
+    }
     public void registrarMatricula(Matricula m) { matriculas.add(m); }
     public void registrarOfertaPeriodo(OfertaPeriodo o) { ofertasPeriodos.add(o); }
 
@@ -66,6 +71,16 @@ public class Academia {
         for (int i = 0; i < docentes.size(); i++) {
             if (docentes.get(i).getIdentificacion().equals(idOriginal)) {
                 docentes.set(i, nuevoDocente);
+                return;
+            }
+        }
+    }
+
+    public void eliminarServicio(ServicioAdicional s) { servicios.remove(s); }
+    public void actualizarServicio(String codigoOriginal, ServicioAdicional nuevoServicio) {
+        for (int i = 0; i < servicios.size(); i++) {
+            if (servicios.get(i).getCodigo().equals(codigoOriginal)) {
+                servicios.set(i, nuevoServicio);
                 return;
             }
         }
