@@ -1,6 +1,5 @@
 package co.edu.uniquindio.linguaplus.app;
 
-import co.edu.uniquindio.linguaplus.modelo.modalidad.Estudiante;
 import co.edu.uniquindio.linguaplus.servicio.ServicioConsultas;
 
 import java.time.LocalDate;

@@ -1,4 +1,2 @@
 package co.edu.uniquindio.linguaplus.modelo.modalidad;
-
-public class Estudiante {
-}
+public interface Carnet { String descripcion(); }
