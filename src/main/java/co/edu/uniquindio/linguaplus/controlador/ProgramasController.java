@@ -1,5 +1,6 @@
 package co.edu.uniquindio.linguaplus.controlador;
 
+import co.edu.uniquindio.linguaplus.modelo.*;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
